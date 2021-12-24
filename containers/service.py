@@ -5,7 +5,7 @@ Implementation of a container service handler
 import os
 import docker
 import yaml
-from .exceptions.tool_not_found import ToolNotFound
+from .exceptions import ToolNotFound, ArgumentNotFound
 
 
 class Service:
@@ -17,25 +17,33 @@ class Service:
         self.client = docker.from_env()
         self._read_tools(tools_dir)
 
-    def _run(self, image: str):
-        return self.client.containers.run(image, detach=True)
+    def _run(self, image: str, cmd: str):
+        return self.client.containers.run(image, cmd, detach=True)
 
     def _read_tools(self, tools_dir: str):
         self.tools = {}
         for filename in os.scandir(tools_dir):
-            with open(filename, "r", encoding="utf-8") as yaml_file:
+            with open(filename.path, "r", encoding="utf-8") as yaml_file:
                 tool = yaml.safe_load(yaml_file)
                 self.tools[tool["id"]] = tool
 
-    def start_task(self, tool_id: str):
+    def start_task(self, tool_id: str, args: {str: str} = None):
         """
         Start a task given a tool id
         """
         try:
-            container = self._run(self.tools[tool_id]["image"])
+            tool = self.tools[tool_id]
         except KeyError as ex:
             raise ToolNotFound() from ex
-        return container.id
+
+        if len(tool['args']) != 0:
+            try:
+                required_args = {arg['key']: args[arg['key']] for arg in tool['args']}
+                container = self._run(tool["image"],
+                                      tool["cmd"].format(**required_args))
+                return container.id
+            except TypeError as ex:
+                raise ArgumentNotFound() from ex
 
     def stream_task_log(self, task_id: str):
         """

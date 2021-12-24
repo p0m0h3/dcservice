@@ -1,3 +1,9 @@
 id: helloworld
 name: Hello World
 image: hello-world
+cmd: echo {arg1}
+args:
+  - order: 1
+    key: arg1
+    value: hello
+has_stdin: false

@@ -1,6 +1,6 @@
 id: helloworld
 name: Hello World
-image: hello-world
+image: alpine
 cmd: echo {arg1}
 args:
   - order: 1

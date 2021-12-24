@@ -3,8 +3,10 @@ Implementation of a container service handler
 """
 
 import os
+
 import docker
 import yaml
+
 from .exceptions import ToolNotFound, ArgumentNotFound
 
 

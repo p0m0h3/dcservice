@@ -20,7 +20,7 @@ class Service:
         self._read_tools(tools_dir)
 
     def _run(self, image: str, cmd: str):
-        return self.client.containers.run(image, cmd, detach=True)
+        return self.client.containers.run(image, command=cmd, detach=True, remove=True)
 
     def _read_tools(self, tools_dir: str):
         self.tools = {}

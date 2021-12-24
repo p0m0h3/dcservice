@@ -1,0 +1,8 @@
+id: gospider
+name: Gospider
+image: trickest/gospider
+cmd: gospider -s {domain}
+args:
+  - key: domain
+
+has_stdin: false

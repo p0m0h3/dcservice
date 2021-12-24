@@ -1,0 +1,8 @@
+id: subfinder
+name: Subfinder
+image: niyisoj263/subfinder-web
+cmd: subfinder -d {domain} -v
+args:
+  - key: domain
+
+has_stdin: false

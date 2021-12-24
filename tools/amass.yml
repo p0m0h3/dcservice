@@ -1,0 +1,8 @@
+id: amass
+name: OWASP amass
+image: caffix/amass
+cmd: enum -brute -active -d {domain}
+args:
+  - key: domain
+
+has_stdin: false

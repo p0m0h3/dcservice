@@ -16,7 +16,10 @@ class Service:
     """
 
     def __init__(self, tools_dir: str):
-        self.client = docker.from_env()
+        try:
+            self.client = docker.from_env()
+        except docker.errors.DockerException:
+            print("Err: Couldn't connect to docker!")
         self._read_tools(tools_dir)
 
     def _run(self, image: str, cmd: str):

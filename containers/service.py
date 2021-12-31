@@ -23,7 +23,7 @@ class Service:
         self._read_tools(tools_dir)
 
     def _run(self, image: str, cmd: str):
-        return self.client.containers.run(image, command=cmd, detach=True, remove=True)
+        return self.client.containers.run(image, command=cmd, detach=True)
 
     def _read_tools(self, tools_dir: str):
         self.tools = {}
@@ -41,11 +41,12 @@ class Service:
         except KeyError as ex:
             raise ToolNotFound() from ex
 
-        if len(tool['args']) != 0:
+        if len(tool["args"]) != 0:
             try:
-                required_args = {arg['key']: args[arg['key']] for arg in tool['args']}
-                container = self._run(tool["image"],
-                                      tool["cmd"].format(**required_args))
+                required_args = {arg["key"]: args[arg["key"]] for arg in tool["args"]}
+                container = self._run(
+                    tool["image"], tool["cmd"].format(**required_args)
+                )
                 return container.id
             except TypeError as ex:
                 raise ArgumentNotFound() from ex

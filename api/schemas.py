@@ -1,23 +1,16 @@
-from typing import List, Dict
+from typing import List, Dict, Optional
 
 from pydantic import BaseModel
 
 
 class Task(BaseModel):
+    tool: str
+    args: Dict[str, str] = {}
+    stdin: Optional[str]
+
+
+class TaskResult(BaseModel):
     id: str
     tool: str
     args: Dict[str, str] = {}
-    owner_id: int
-
-    class Config:
-        orm_mode = True
-
-
-class User(BaseModel):
-    id: int
-    email: str
-    is_active: bool
-    tasks: List[Task] = []
-
-    class Config:
-        orm_mode = True
+    stdin: Optional[str]

@@ -34,7 +34,9 @@ class Service:
             print("Err: Couldn't connect to docker!")
         self._read_tools(tools_dir)
 
-    def _run(self, image: str, cmd: str) -> str:
+    def _run(self, image: str, cmd: str, stdin: str = "") -> str:
+        if stdin:
+            cmd = f'echo "{stdin}" | {cmd}'
         container_id = self.client.containers.run(image, command=cmd, detach=True).id
         self.containers.append(container_id)
         return container_id
@@ -45,7 +47,7 @@ class Service:
                 tool = yaml.safe_load(yaml_file)
                 self.tools[tool["id"]] = tool
 
-    def start_task(self, tool_id: str, args: {str: str} = None) -> str:
+    def start_task(self, tool_id: str, args: {str: str} = None, stdin: str = "") -> str:
         """
         Start a task given a tool id
         """
@@ -58,7 +60,7 @@ class Service:
             try:
                 required_args = {arg["key"]: args[arg["key"]] for arg in tool["args"]}
                 container_id = self._run(
-                    tool["image"], tool["cmd"].format(**required_args)
+                    tool["image"], tool["cmd"].format(**required_args), stdin
                 )
                 return container_id
             except TypeError as ex:
@@ -77,6 +79,6 @@ class Service:
 
             container.remove()
             self.containers.remove(task_id)
-            return logs
+            return logs.decode("utf-8")
         except docker.errors.NotFound as ex:
             raise ContainerNotFound() from ex

@@ -13,7 +13,7 @@ class Task(BaseModel):
 
     tool: str
     args: Dict[str, str] = {}
-    stdin: Optional[str]
+    stdin: Optional[str] = ""
 
 
 class TaskResult(BaseModel):
@@ -24,7 +24,7 @@ class TaskResult(BaseModel):
     id: str
     tool: str
     args: Dict[str, str] = {}
-    stdin: Optional[str]
+    stdin: Optional[str] = ""
 
 
 class TaskOutput(BaseModel):

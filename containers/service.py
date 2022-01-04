@@ -76,6 +76,7 @@ class Service:
             logs = container.logs(stdout=True)
 
             container.remove()
+            self.containers.remove(task_id)
             return logs
         except docker.errors.NotFound as ex:
             raise ContainerNotFound() from ex

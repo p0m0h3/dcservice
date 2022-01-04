@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "dcservice"
+version = "0.1.0"
+description = ""
+authors = ["Pouria Mokhtari <contact@pouriamokhtari.ir>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "^0.70.1"
+pydantic = "^1.9.0"
+PyYAML = "^6.0"
+python-dotenv = "^0.19.2"
+docker = "^5.0.3"
+uvicorn = "^0.16.0"
+
+[tool.poetry.dev-dependencies]
+pylint = "^2.12.2"
+black = "^21.12b0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

@@ -79,6 +79,6 @@ class Service:
 
             container.remove()
             self.containers.remove(task_id)
-            return logs.decode("utf-8")
+            return logs
         except docker.errors.NotFound as ex:
             raise ContainerNotFound() from ex

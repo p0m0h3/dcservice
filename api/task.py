@@ -2,7 +2,11 @@ from fastapi import APIRouter
 
 from fastapi import HTTPException
 from containers import service
-from containers.exceptions import ContainerNotExited, ContainerNotFound
+from containers.exceptions import (
+    ContainerNotExited,
+    ContainerNotFound,
+    ArgumentNotFound,
+)
 from .schemas import Task, TaskResult, TaskOutput, TaskStatus
 
 router = APIRouter()
@@ -15,7 +19,12 @@ def get_tools():
 
 @router.post("/task", response_model=TaskResult)
 def create_task(task: Task):
-    task_id = service.start_task(task.tool, args=task.args)
+    try:
+        task_id = service.start_task(task.tool, args=task.args)
+    except ArgumentNotFound as ex:
+        raise HTTPException(
+            status_code=422, detail="A required argument is not entered."
+        ) from ex
     return TaskResult(id=task_id, tool=task.tool, args=task.args, stdin=task.stdin)
 
 

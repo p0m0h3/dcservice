@@ -63,7 +63,7 @@ class Service:
                     tool["image"], tool["cmd"].format(**required_args), stdin
                 )
                 return container_id
-            except TypeError as ex:
+            except KeyError as ex:
                 raise ArgumentNotFound() from ex
 
     def task_status(self, task_id: str) -> str:

@@ -34,3 +34,12 @@ class TaskOutput(BaseModel):
 
     id: str
     output: str
+
+
+class TaskStatus(BaseModel):
+    """
+    A task with status update
+    """
+
+    id: str
+    status: str

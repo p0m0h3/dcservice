@@ -66,6 +66,15 @@ class Service:
             except TypeError as ex:
                 raise ArgumentNotFound() from ex
 
+    def task_status(self, task_id: str) -> str:
+        """
+        get the status of a task
+        """
+        try:
+            return self.client.containers.get(task_id).status
+        except docker.errors.NotFound:
+            raise ContainerNotFound
+
     def fetch_output(self, task_id: str) -> str:
         """
         get a blocking stream of task log

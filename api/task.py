@@ -2,8 +2,8 @@ from fastapi import APIRouter
 
 from fastapi import HTTPException
 from containers import service
-from containers.exceptions import ContainerNotExited
-from .schemas import Task, TaskResult, TaskOutput
+from containers.exceptions import ContainerNotExited, ContainerNotFound
+from .schemas import Task, TaskResult, TaskOutput, TaskStatus
 
 router = APIRouter()
 
@@ -14,9 +14,17 @@ def get_tools():
 
 
 @router.post("/task", response_model=TaskResult)
-def read_root(task: Task):
+def create_task(task: Task):
     task_id = service.start_task(task.tool, args=task.args)
     return TaskResult(id=task_id, tool=task.tool, args=task.args, stdin=task.stdin)
+
+
+@router.get("/task/{task_id}", response_model=TaskStatus)
+def get_task(task_id: str):
+    try:
+        return TaskStatus(id=task_id, status=service.task_status(task_id))
+    except ContainerNotFound:
+        raise HTTPException(status_code=404)
 
 
 @router.get("/task/{task_id}/output", response_model=TaskOutput)

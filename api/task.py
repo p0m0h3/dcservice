@@ -32,8 +32,8 @@ def create_task(task: Task):
 def get_task(task_id: str):
     try:
         return TaskStatus(id=task_id, status=service.task_status(task_id))
-    except ContainerNotFound:
-        raise HTTPException(status_code=404)
+    except ContainerNotFound as ex:
+        raise HTTPException(status_code=404) from ex
 
 
 @router.get("/task/{task_id}/output", response_model=TaskOutput)

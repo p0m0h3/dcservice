@@ -1,7 +1,8 @@
 import base64
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
 from fastapi import HTTPException
+from fastapi.security import APIKeyHeader
 from containers import service
 from containers.exceptions import (
     ContainerNotExited,
@@ -9,8 +10,9 @@ from containers.exceptions import (
     ArgumentNotFound,
 )
 from .schemas import Task, TaskResult, TaskOutput, TaskStatus
+from .auth import authorize
 
-router = APIRouter()
+router = APIRouter(dependencies=[Depends(authorize)])
 
 
 @router.get("/tools")

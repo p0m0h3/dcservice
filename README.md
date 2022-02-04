@@ -9,7 +9,7 @@ It plans to support the following featues:
  * Reading tools from yaml config files
  * Delivering standard input and command line arguments to tasks
  * Delivering input files to tasks
- * Output retreival
+ * Output retrieval
  * Output streaming (via websockets)
 
 # Run

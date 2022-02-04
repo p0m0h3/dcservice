@@ -1,3 +1,4 @@
+import base64
 from fastapi import APIRouter
 
 from fastapi import HTTPException
@@ -39,7 +40,9 @@ def get_task(task_id: str):
 @router.get("/task/{task_id}/output", response_model=TaskOutput)
 def fetch_output(task_id: str):
     try:
-        return TaskOutput(id=task_id, output=service.fetch_output(task_id))
+        return TaskOutput(
+            id=task_id, output=base64.b64encode(service.fetch_output(task_id))
+        )
     except ContainerNotExited as ex:
         raise HTTPException(
             status_code=503,
